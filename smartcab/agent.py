@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -​*- coding: utf-8 -*​-
+
 import random
 import numpy as np
 import pandas as pd
@@ -7,11 +10,13 @@ from simulator import Simulator
 
 
 class LearningAgent(Agent):
-    """An agent that learns to drive in the smartcab world."""
+
+    """
+    An agent that learns to drive in the smartcab world.
+    """
 
     def __init__(self, env):
-        super(LearningAgent, self).__init__(
-            env)  # sets self.env = env, state = None, next_waypoint = None, and a default color
+        super(LearningAgent, self).__init__(env)  # sets self.env = env, state = None, next_waypoint = None, and a default color
         self.temp_q_table = {}
         self.color = 'red'  # override color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
@@ -22,7 +27,8 @@ class LearningAgent(Agent):
         self.actions = [None, 'forward', 'left', 'right']
         self.waypoints = ['forward', 'right', 'left']
         self.lights = ['red', 'green']
-        self.q_table = self.create_q_table(self.actions, self.waypoints, self.lights)
+        self.q_table = self.create_q_table(self.actions, self.waypoints,
+                                           self.lights)
 
     def reset(self, destination=None):
         self.planner.route_to(destination)
@@ -70,7 +76,6 @@ class LearningAgent(Agent):
 
 def run():
     """Run the agent for a finite number of trials."""
-
     # Set up environment and agent
     e = Environment()  # create environment (also adds some dummy traffic)
     a = e.create_agent(LearningAgent)  # create agent
