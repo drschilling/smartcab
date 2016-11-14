@@ -25,7 +25,7 @@ class Simulator(object):
         self.env = env
         self.size = size if size is not None else ((self.env.grid_size[0] + 1) * self.env.block_size, (self.env.grid_size[1] + 1) * self.env.block_size)
         self.width, self.height = self.size
-        
+
         self.bg_color = self.colors['white']
         self.road_width = 5
         self.road_color = self.colors['black']

@@ -1,6 +1,5 @@
 import csv
 import random
-import numpy as np
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
@@ -12,34 +11,35 @@ class LearningAgent(Agent):
     def __init__(self, env):
         super(LearningAgent, self).__init__(
             env)  # sets self.env = env, state = None, next_waypoint = None, and a default color
-        self.temp_q_table = {}
+        self.number_of_trials = 1  # number of trials
         self.color = 'red'  # override color
+        self.sum_time_left = 0  # total sum of the time left till one trial reaches the deadline
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
-        # TODO: Initialize any additional variables here
-        self.actions = [None, 'forward', 'left', 'right']
-        self.n_penalties = 0  # number of penalties incurred
-        self.destination_reached = False
-        self.qvals = {}  # mapping (state, action) to q-values
+        self.actions = ['forward', 'left', 'right', None]  # set of possible actions
+        self.number_of_penalties = 0  # number of penalties incurred
+        self.destination_reached = False  # number of times that our smartcab reach its destination
 
     def reset(self, destination=None):
         self.planner.route_to(destination)
-        self.write_state_to_csv(self.n_penalties, self.destination_reached)
-        self.n_penalties = 0
-        self.destination_reached = False
-        # TODO: Prepare for a new trip; reset any variables here, if required
+        self.number_of_trials += 1  # increment the number of trials
+        self.write_state_to_csv(self.number_of_trials, self.number_of_penalties, self.destination_reached,
+                                self.env.get_sum_time_left()) # creates an output file with metrics every new trip
+        self.number_of_penalties = 0  # reset the number of penalties
+        self.destination_reached = False  # reset if the destination is reached
+        self.sum_time_left = 0  # reset the time left
 
     def update(self, t):
         # Gather inputs
         self.next_waypoint = self.planner.next_waypoint()  # from route planner, also displayed by simulator
         inputs = self.env.sense(self)
-        deadline = self.env.get_deadline(self)
-        self.state = (inputs['light'], inputs['oncoming'], self.next_waypoint)
+        self.state = (inputs['light'], inputs['oncoming'], self.next_waypoint) # create a primary state
 
-        act = random.choice(self.env.valid_actions)
+        # random choice of actions
+        act = random.choice(self.actions)
 
         reward = self.env.act(self, act)
         if reward < 0:
-            self.n_penalties += 1
+            self.number_of_penalties += 1
 
         location = self.env.agent_states[self]["location"]
         destination = self.env.agent_states[self]["destination"]
@@ -47,19 +47,11 @@ class LearningAgent(Agent):
         if location == destination:
             self.destination_reached = True
 
-        self.qvals[(self.state, act, reward)] = 0
-
-        print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}, n_penalties = {}".format(
-            deadline, inputs,
-            act,
-            reward,
-            self.n_penalties)  # [debug]
-
     @staticmethod
-    def write_state_to_csv(n_penalties, destination_reached):
-        output_file = open('random_output.csv', 'a')
+    def write_state_to_csv(number_of_trials, number_of_penalties, destination_reached, time_left):
+        output_file = open('results/random_output.csv', 'a')
         writer = csv.writer(output_file)
-        writer.writerow((n_penalties, destination_reached))
+        writer.writerow((number_of_trials, number_of_penalties, destination_reached, time_left))
         output_file.close()
 
 
