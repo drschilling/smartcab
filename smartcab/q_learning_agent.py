@@ -16,7 +16,7 @@ class LearningAgent(Agent):
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         self.num_trials = 1  # number of trials
         self.alpha = 0.0  # learning rate initialization
-        self.epsilon = 0.0  # the probability of an event should occur
+        self.epsilon = 0.2  # the probability of an event should occur
         self.actions = [None, 'forward', 'left', 'right']  # set of possible actions
         self.waypoints = ['forward', 'right', 'left']  # set of possible waypoints
         self.lights = ['red', 'green']  # set of possible lights
@@ -45,8 +45,7 @@ class LearningAgent(Agent):
 
         # Selecting an action Epsilon greedy policy that is selecting random actions with uniform distribution
         # from a set of available actions.
-        self.epsilon = 1.0 / self.num_trials
-        if random.randint(0, 10) < self.epsilon:
+        if random.random() < self.epsilon:
             act = random.choice(self.env.valid_actions) # selecting a random action
         else:
             act = self.actions[max_q_value] # selecting a max action

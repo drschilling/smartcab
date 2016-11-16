@@ -31,8 +31,6 @@ class LearningAgent(Agent):
     def update(self, t):
         # Gather inputs
         self.next_waypoint = self.planner.next_waypoint()  # from route planner, also displayed by simulator
-        inputs = self.env.sense(self)
-        self.state = (inputs['light'], inputs['oncoming'], self.next_waypoint) # create a primary state
 
         # random choice of actions
         act = random.choice(self.actions)

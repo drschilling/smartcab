@@ -48,7 +48,7 @@ class LearningAgent(Agent):
         # Selecting an action Epsilon greedy policy that is selecting random actions with uniform distribution
         # from a set of available actions.
         self.epsilon = 1.0 / self.num_trials
-        if random.randint(0, 10) < self.epsilon:
+        if random.random() < self.epsilon:
             act = random.choice(self.env.valid_actions) # selecting a random action
         else:
             act = self.actions[max_q_value] # selecting a max action
