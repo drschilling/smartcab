@@ -1,4 +1,4 @@
-number_of_trials,alpha,epsilon,number_of_penalties,destination_reached,time_left 
+number_of_trials,alpha,epsilon,number_of_penalties,destination_reached,time_left
 2,0.0,0.0,0,False,0
 3,0.72134752044448169,0.5,10,True,1
 4,0.62133493455961186,0.3333333333333333,6,True,13
