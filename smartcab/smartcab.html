@@ -13709,15 +13709,18 @@ ZmZmZmZmZma5cGLKzMzMzMzMzMxy8f8B+LqVU+oAF04AAAAASUVORK5CYII=
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>The random agent would make bad decisions with a high frequency ranging from ~ 39 to 43% of the time, of which approximately 10% would cause accidents. Such reliability (approximately 40%) makes sense if we are to think that the agent is being driven by random actions without obeying the rules of traffic, which increases the chance of accidents and penalties by breaking them. The agent is receiving two different types of reward:</p>
+<p>The random agent would make bad decisions with a high frequency ranging from ~ 39 to 43% of the time, of which approximately 10% would cause accidents. Such reliability (approximately 40%) makes sense if we are to think that the agent is being driven by random actions without obeying the rules of traffic, which increases the chance of accidents and penalties by breaking them. The agent is receiving three different types of reward:</p>
 <ul>
-<li><p>Negative Rewards: Represents the majority of rewards for this agent. The lower values indicates bigger infractions caused by the agent, which may be the minor and major violation, and major and minor accidents.</p>
-</li>
-<li><p>Positive Rewards: Represents the minority of rewards for this agent. The agent receives positive rewards by obeying the rules of traffic signaling, and by reaching the ultimate goal of his destination.</p>
-</li>
+<li>Negative Rewards: Represents the majority of rewards for this agent. The lower values indicates bigger infractions caused by the agent, which may be the minor and major violation, and major and minor accidents.</li>
+</ul>
+<ul>
+<li>Neutral Rewards: When the agent successfully obeys the traffic rules and stands still.</li>
+</ul>
+<ul>
+<li>Positive Rewards: Represents the minority of rewards for this agent. Every time the agent reaches its destination or reaches successfully the next waypoint within the predetermined deadline.</li>
 </ul>
 <p>According to the graph of the average rewards per share during the random agent test we can observe the predominance of negative values below -4, which suggests that the agent suffered from high levels of the penalty during the process. Another feature of the agent is that despite some sporadic positive reward results, high penalty levels remain during the course of the attempts indicating that there was no learning or improvement during the process.</p>
-<p>The agent had a poor performance in reliability and safety, getting the grading <strong>F</strong> in both. This demonstrates that the agent in question would not be safe for human passengers because of the relatively high number of accidents it is able to cause by not following the rules of transit, which invariably interferes with the agent's performance in reaching his final destination.</p>
+<p>The agent had a poor performance in reliability and safety, getting the grading <strong>F</strong> in both. This demonstrates that the agent in question would not be safe for human passengers because of the relatively high number of accidents it is able to cause by not following the rules of transit, which invariably interferes with the agent's performance in reaching its final destination.</p>
 
 </div>
 </div>
@@ -13771,7 +13774,7 @@ ZmZmZmZmZma5cGLKzMzMzMzMzMxy8f8B+LqVU+oAF04AAAAASUVORK5CYII=
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
 <p>The agent must move within a grid space (eight columns and six rows) wherein each attempt a destination represented by a coordinate (x, y) will be assigned to it. This destination should be reached within a delta time considering the enviroment traffic rules, and if the deadline is reached it is considered that the agent failed to reach the final destination.With each new attempt to reach the destination, our agent's current state is updated by receiving a new traffic <strong>light</strong> rule, a new <strong>oncoming</strong> traffic actions, information about if there is traffic from the <strong>right</strong> of the agent, information about if there is traffic from the <strong>left</strong> of the agent, a new <strong>waypoint position</strong> to which it must be moved to reach the destination, and a <strong>deadline</strong> which will measure the amount of time that agent has to reach its destination.</p>
-<p>For this project I will not consider updating the information for <strong>left</strong> and <strong>right</strong> because I believe that these could be used in more specific situations, and the same can be obtained by updating the oncoming and lights parameters. I also will not consider <strong>deadline</strong> because it has a dynamic nature and decreases every time an agent moves (aumentando exponencialmente o state space). What means that even if my agent have encountered that particular inputs['light'], inputs['oncoming'], self.next_waypoint instance before, it would consider it a different state if the deadline is different not guaranteeing a consistency.</p>
+<p>For this project I will not consider updating the information for <strong>left</strong> and <strong>right</strong> because I believe that these could bring way more complexity (more states) and be hard to populate the Q-Table. I also will not consider <strong>deadline</strong> because it has a dynamic nature and decreases every time an agent moves (exponentially increasing the state space). What means that even if my agent have encountered that particular inputs['light'], inputs['oncoming'], self.next_waypoint instance before, it would consider it a different state if the deadline is different not guaranteeing a consistency.</p>
 
 </div>
 </div>
@@ -18205,7 +18208,7 @@ kk8T6wAAAABJRU5ErkJggg==
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>We know that the objective of the project is to find the ideal conditions within the problem of automating a smartcab how to drive alone for this we must take into account some metrics that will ensure if the agent had good or poor performance during the course of its training. Good performance means reaching the destination within a small time interval and not miss the traffic rules as follows.</p>
+<p>We know that the objective of the project is to find the ideal conditions within the problem of automating a smartcab how to drive alone for this we must take into account some metrics that will ensure if the agent had good or poor performance during the course of its training. Good performance means reaching the destination within a small time interval and not miss the traffic rules. According to the results we will see below I have reason to believe that the applied policy is a <strong>suboptimal</strong> policy mainly because of the slow decay of the learning rate. That measure for the learner has an opportunity to avoid local maximum / minimum. In other wordsif the learning rate is decreased too quickly, the learner will have a big chance to settle on a suboptimal solution, which is not the case.</p>
 <h4 id="Traffic-rules">Traffic rules<a class="anchor-link" href="#Traffic-rules">&#182;</a></h4><ul>
 <li><p>Green traffic light: Can do: Move / Can't do: left turn when oncoming traffic is going forward or turning right</p>
 </li>
@@ -18223,7 +18226,7 @@ kk8T6wAAAABJRU5ErkJggg==
 </li>
 </ul>
 <ul>
-<li><p>Second example: In front of a green light, the agent who owns a vehicle in itsrection coming from the right and as next waypoint being move forward. Obeying the traffic rules the positive reward is given the expected action that is to move The agent forward (forward: 1.80), while holding still and deflecting to the left will cause negative rewards for being considered violations.</p>
+<li><p>Second example: In front of a green light, the agent who owns a vehicle in its direction coming from the right and as next waypoint being move forward. Obeying the traffic rules the positive reward is given the expected action that is to move the agent forward (forward: 1.80), while holding still and deflecting to the left will cause negative rewards for being considered violations.</p>
 <p><strong>('green', 'right', 'forward')
    -- forward : 1.80
    -- None : -4.80
@@ -18232,7 +18235,7 @@ kk8T6wAAAABJRU5ErkJggg==
 </li>
 </ul>
 <ul>
-<li><p>Third example: In front of a green light, the agent who owns a vehicle in itsrection coming from the left and as next waypoint being moved to the right.Obeying the traffic rules the highest positive reward is given the expected action that is Move the agent to the right (right: 1.68). No other action will receive negative rewards, however, depending on the policy the agent will choose the action that responds with the highest reward.</p>
+<li><p>Third example: In front of a green light, the agent who owns a vehicle in itsrection coming from the left and as next waypoint being moved to the right.Obeying the traffic rules the highest positive reward is given the expected action that is move the agent to the right (right: 1.68). No other action will receive negative rewards, however, depending on the policy the agent will choose the action that responds with the highest reward.</p>
 <p><strong>('green', 'left', 'right')
    -- forward : 0.97
    -- None : 1.04
